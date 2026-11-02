@@ -12,6 +12,10 @@ class Sensor{
         int minimo;
         int maximo;
 
+        bool valido;
+        
+        int ciclosSinActualizar;
+
     public:
 
         //Constructor    
@@ -32,5 +36,6 @@ class Sensor{
         void setMaximo(int maximo);
 
         bool esValorValido() const;
-
+        
+        void registrarCicloSinActualizar();
 };

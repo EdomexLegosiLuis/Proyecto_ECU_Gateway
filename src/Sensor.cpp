@@ -3,15 +3,16 @@
 Sensor::Sensor(
     const std::string &nombre,
     const std::string &unidadDeMedida, 
-    int valor, //porque no se agregaba valor al constructor?
+    int valor, //porque no se agregaba valor al constructor
     int minimo, 
-    int maximo):
+    int maximo){
 
-    nombre(nombre), 
-    unidadDeMedida(unidadDeMedida), 
-    valor(valor), 
-    minimo(minimo), 
-    maximo(maximo) {}
+    this->nombre = nombre;
+    this->unidadDeMedida = unidadDeMedida;
+    this->valor = valor;
+    this->minimo = minimo;
+    this->maximo = maximo; 
+    }
 
     
         std::string Sensor::getNombre() const{
@@ -56,4 +57,12 @@ Sensor::Sensor(
 
         bool Sensor::esValorValido() const{
             return valor >= minimo && valor <= maximo;
+        }
+
+        void Sensor::registrarCicloSinActualizar() {
+            ciclosSinActualizar++;
+
+            if (ciclosSinActualizar > 5) {
+                valido = false;
+            }
         }
