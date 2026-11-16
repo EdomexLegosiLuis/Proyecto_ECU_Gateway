@@ -1,7 +1,6 @@
 #pragma once
 
-#include <vector>
-#include "Sensor.h"
+#include "ECUGateway.h"
 
 enum class EstadoECU {
     INIT,
@@ -14,12 +13,11 @@ class ECUControl {
     
     private:
         EstadoECU estadoActual;
-        std::vector<Sensor> sensores; // Vector para almacenar los sensores asociados a la ECU
-
 
     public:
         ECUControl();
         
+        void diagnosticar(const ECUGateway& gateway);
+
         EstadoECU getEstadoActual() const;
-        void setEstadoActual(EstadoECU nuevoEstado);
 };
