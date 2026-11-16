@@ -1,9 +1,20 @@
 #include "Dashboard.h"
 
-#include <iostream>  // Se usa para impresión básica
-#include <iomanip>  // Se usa para comandos de escape o fix para formato 
-#include <cstdlib>  // Nos permite hacer operaciones referentes al sistema y su terminal
+#include <iostream>  // Impresión básica
+#include <iomanip>   // Formato de salida (setw, setprecision)
+#include <cstdlib>   // system("clear")
 
+namespace {
+
+void imprimirSensor(const Sensor& sensor)
+{
+    std::cout << std::left  << std::setw(20) << sensor.getNombre() << ": "
+              << std::right << std::setw(10) << sensor.getValor() << " "
+              << std::left  << std::setw(6)  << sensor.getUnidadDeMedida()
+              << (sensor.esRangoValido() ? "VALIDA" : "INVALIDA") << "\n";
+}
+
+}
 
 const std::string Dashboard::estadoATexto(EstadoECU estado) const
 {
@@ -25,51 +36,23 @@ const std::string Dashboard::estadoATexto(EstadoECU estado) const
     return "DESCONOCIDO";
 }
 
-
 void Dashboard::mostrar(const ECUControl& ecuControl, const ECUGateway& ecuGateway) const
 {
     system("clear");
 
     std::cout << "=============================================================\n";
-
-    std::cout << "                    ECU GATEWAYzz DASHBOARD\n";
-
+    std::cout << "                    ECU GATEWAY / CONTROL\n";
     std::cout << "=============================================================\n";
-
-    std::cout << "Estado ECU        : " << estadoATexto(ecuControl.getEstadoActual()) << "\n\n";
 
     std::cout << std::fixed << std::setprecision(2);
 
-    std::cout << std::left << std::setw(18) 
-              << ecuGateway.obtenerSensor("Velocidad").getNombre() << " : "           
-              << ecuGateway.obtenerSensor("Velocidad").getValor()
-              << std::right << std::setw(6) 
-              << ecuGateway.obtenerSensor("Velocidad").getUnidadDeMedida() << "\n";
+    imprimirSensor(ecuGateway.obtenerSensor("Velocidad"));
+    imprimirSensor(ecuGateway.obtenerSensor("RPM"));
+    imprimirSensor(ecuGateway.obtenerSensor("Temperatura"));
+    imprimirSensor(ecuGateway.obtenerSensor("Voltaje de bateria"));
+    imprimirSensor(ecuGateway.obtenerSensor("Presion de aceite"));
 
-    std::cout << std::left << std::setw(18) 
-              << ecuGateway.obtenerSensor("RPM").getNombre() << " : "     
-              << ecuGateway.obtenerSensor("RPM").getValor() 
-              << std::right << std::setw(6) 
-              << ecuGateway.obtenerSensor("RPM").getUnidadDeMedida() << "\n";
-    
-    std::cout << std::left << std::setw(18) 
-              << ecuGateway.obtenerSensor("Temperatura").getNombre() << " : " 
-              << ecuGateway.obtenerSensor("Temperatura").getValor() 
-              << std::right << std::setw(6)
-              << ecuGateway.obtenerSensor("Temperatura").getUnidadDeMedida() << "\n";
-
-    std::cout << std::left << std::setw(18) 
-              << ecuGateway.obtenerSensor("Voltaje de bateria").getNombre() << " : " 
-              << ecuGateway.obtenerSensor("Voltaje de bateria").getValor() 
-              << std::right << std::setw(6) 
-              << ecuGateway.obtenerSensor("Voltaje de bateria").getUnidadDeMedida() <<"\n";
-
-    std::cout << std::left << std::setw(18) 
-              << ecuGateway.obtenerSensor("Presion de aceite").getNombre() << " : " 
-              << ecuGateway.obtenerSensor("Presion de aceite").getValor() 
-              << std::right << std::setw(6) 
-              << ecuGateway.obtenerSensor("Presion de aceite").getUnidadDeMedida() << "\n";
-
+    std::cout << "-------------------------------------------------------------\n";
+    std::cout << "ECU CONTROL: " << estadoATexto(ecuControl.getEstadoActual()) << "\n";
     std::cout << "=============================================================\n";
-
 }
